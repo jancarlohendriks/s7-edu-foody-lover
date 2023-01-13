@@ -1,62 +1,36 @@
-import { useEffect, useRef } from "react";
-
-// import mapboxgl from "mapbox-gl";
-// import "mapbox-gl/dist/mapbox-gl.css";
-
-// const NewMap = ({ lat, lng }) => {
-//   const mapContainer = useRef(null);
-//   const map = useRef(null);
-
-//   useEffect(() => {
-//     mapboxgl.accessToken = process.env.MAPBOX_TOKEN ?? "";
-
-//     map.current = new mapboxgl.Map({
-//       container: mapContainer.current,
-//       style: "mapbox://styles/mapbox/light-v10",
-//       center: [lat, lng], // center map on Chad
-//       zoom: 10,
-//     });
-//   }, [lat, lng]);
-
-//   return (
-//     <main>
-//       <div id="myMap" className="map-container" ref={mapContainer} />
-//       <div
-//         onClick={() =>
-//           map.current.flyTo({
-//             center: [(Math.random() - 0.5) * 360, (Math.random() - 0.5) * 100],
-//             essential: true, // this animation is considered essential with respect to prefers-reduced-motion
-//           })
-//         }
-//       >
-//         Hello
-//       </div>
-//     </main>
-//   );
-// };
-
-// export default NewMap;
-
-import { Map, useMap } from "react-map-gl";
+import Image from "next/image";
+import { Map, useMap, Source, Layer, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import dishes from "pages/dishes/data/dishes";
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
 
+const geojson = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [-122.4, 37.8] },
+    },
+  ],
+};
+
+const layerStyle = {
+  id: "point",
+  type: "circle",
+  paint: {
+    "circle-radius": 10,
+    "circle-color": "#007cbf",
+  },
+};
+
 const state = {
-  latitude: dishes[0].location.lat,
-  longitude: dishes[0].location.lng,
   zoom: 9,
 };
 
-export default function DishesMap({ lat, lng }) {
+export default function DishesMap({ coordinates }) {
   const { myMap } = useMap();
-  myMap && myMap.flyTo({ center: [lat, lng] });
-  // console.log(myMap);
-
-  // useEffect(() => {
-  //   myMap.flyTo({ center: [lat, lng] });
-  // }, [lat, lng, myMap]);
+  // myMap && myMap.setCenter(coordinates);
+  myMap && myMap.flyTo({ center: coordinates });
 
   return (
     <Map
@@ -65,7 +39,23 @@ export default function DishesMap({ lat, lng }) {
       style={{ width: 800, height: 600 }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
-    />
+    >
+      <Source id="my-data" type="geojson" data={geojson}>
+        <Layer {...layerStyle} />
+      </Source>
+      <Marker
+        longitude={coordinates[0]}
+        latitude={coordinates[1]}
+        anchor="bottom"
+      >
+        <Image
+          src={"/images/marker-icon-2x.png"}
+          alt=""
+          width={50 / 2}
+          height={82 / 2}
+        />
+      </Marker>
+    </Map>
   );
 }
 
