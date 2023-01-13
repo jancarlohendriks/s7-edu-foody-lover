@@ -100,3 +100,7 @@ button:focus {
 button svg {
   margin-right: 5px;
 }
+
+.map-container {
+  height: 400px;
+}

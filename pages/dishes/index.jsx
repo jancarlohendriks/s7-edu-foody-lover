@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import dishes from "./dishes";
@@ -6,6 +7,11 @@ import starters from "./starters";
 import desserts from "./desserts";
 
 export default function Dishes() {
+  const DishesMap = dynamic(() => import("@/components/DishesMap"), {
+    ssr: false,
+    loading: () => <p>A map is loading</p>,
+  });
+
   const [currentDish, setCurrentDish] = useState(0);
 
   const handlePreviousDish = () => {
@@ -20,6 +26,8 @@ export default function Dishes() {
 
   return (
     <DefaultLayout>
+      {/* <Map /> */}
+      <DishesMap />
       <article>
         <h2>{dishes[currentDish].title}</h2>
         <p>{dishes[currentDish].paragraph}</p>
