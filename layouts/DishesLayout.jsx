@@ -1,7 +1,7 @@
 import styles from "@/styles/Home.module.css";
 import Navigation from "@/components/Navigation";
 
-const DefaultLayout = ({ children }) => {
+const DishesLayout = ({ children }) => {
   return (
     <div className={styles.container}>
       <Navigation />
@@ -10,4 +10,4 @@ const DefaultLayout = ({ children }) => {
   );
 };
 
-export default DefaultLayout;
+export default DishesLayout;

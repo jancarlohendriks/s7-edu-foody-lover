@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import { Map, useMap } from "react-map-gl";
+
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { MapProvider } from "react-map-gl";
@@ -12,11 +15,29 @@ import desserts from "./data/desserts";
 const DishesMapWithNoSSR = dynamic(() => import("@/components/DishesMap"), {
   ssr: false,
 });
-import { NavigateButton } from "@/components/DishesMap";
+import NewMap, { NavigateButton } from "@/components/DishesMap";
 import DishCard from "@/components/DishCard";
 
 export default function Dishes() {
   const [currentDish, setCurrentDish] = useState(0);
+  // const map = useRef(null);
+
+  // useEffect(() => {
+  //   console.log(map.current);
+  // }, []);
+
+  const { myMap } = useMap();
+
+  useEffect(() => {
+    console.log(myMap);
+    // myMap &&
+    // myMap.flyTo({
+    //   center: [
+    //     dishes[currentDish].location.lat,
+    //     dishes[currentDish].location.lng,
+    //   ],
+    // });
+  }, [currentDish, myMap]);
 
   const handlePreviousDish = () => {
     const previousDish = currentDish - 1;
@@ -31,10 +52,23 @@ export default function Dishes() {
   return (
     <div>
       <MapProvider>
-        <DishesMapWithNoSSR />
+        <DishesMapWithNoSSR
+          lat={dishes[currentDish].location.lat}
+          lng={dishes[currentDish].location.lng}
+        />
         <div>asdasd</div>
-        <NavigateButton />
+        <NavigateButton
+          center={[
+            dishes[currentDish + 1].location.lat,
+            dishes[currentDish + 1].location.lng,
+          ]}
+        />
       </MapProvider>
+      {/* <NewMap
+        ref={map}
+        lat={dishes[0].location.lat}
+        lng={dishes[0].location.lng}
+      /> */}
 
       <DefaultLayout>
         <DishCard
