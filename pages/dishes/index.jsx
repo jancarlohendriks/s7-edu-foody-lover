@@ -3,15 +3,19 @@ import { useState } from "react";
 import { MapProvider } from "react-map-gl";
 
 import DefaultLayout from "@/layouts/DefaultLayout";
+
 import dishes from "./data/dishes";
 import drinks from "./data/drinks";
 import starters from "./data/starters";
 import desserts from "./data/desserts";
 
-const ComponentWithNoSSR = dynamic(() => import("./Map"), { ssr: false });
-import { NavigateButton } from "./Map";
+const DishesMapWithNoSSR = dynamic(() => import("@/components/DishesMap"), {
+  ssr: false,
+});
+import { NavigateButton } from "@/components/DishesMap";
+import DishCard from "@/components/DishCard";
 
-const Dishes = () => {
+export default function Dishes() {
   const [currentDish, setCurrentDish] = useState(0);
 
   const handlePreviousDish = () => {
@@ -27,25 +31,19 @@ const Dishes = () => {
   return (
     <div>
       <MapProvider>
-        <ComponentWithNoSSR />
+        <DishesMapWithNoSSR />
         <div>asdasd</div>
         <NavigateButton />
       </MapProvider>
 
       <DefaultLayout>
-        <article>
-          <h2>{dishes[currentDish].title}</h2>
-          <p>{dishes[currentDish].paragraph}</p>
-          <ul>
-            <li>{drinks[dishes[currentDish].recommendations.drink].title}</li>
-            <li>
-              {starters[dishes[currentDish].recommendations.starter].title}
-            </li>
-            <li>
-              {desserts[dishes[currentDish].recommendations.dessert].title}
-            </li>
-          </ul>
-        </article>
+        <DishCard
+          title={dishes[currentDish].title}
+          paragraph={dishes[currentDish].paragraph}
+          drink={drinks[dishes[currentDish].recommendations.drink].title}
+          starter={starters[dishes[currentDish].recommendations.starter].title}
+          dessert={desserts[dishes[currentDish].recommendations.dessert].title}
+        />
         <div>
           <button onClick={handlePreviousDish}>Previous</button>
           <button onClick={handleNextDish}>Next</button>
@@ -54,6 +52,4 @@ const Dishes = () => {
       </DefaultLayout>
     </div>
   );
-};
-
-export default Dishes;
+}

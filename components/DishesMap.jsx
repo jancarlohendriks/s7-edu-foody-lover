@@ -3,7 +3,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
 
-export default function MapBox() {
+export default function DishesMap() {
   return (
     <Map
       id="myMap"
