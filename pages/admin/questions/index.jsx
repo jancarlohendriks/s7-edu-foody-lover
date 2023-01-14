@@ -9,11 +9,26 @@ export default function AdminQuestions({ questions }) {
   console.log(questions);
 
   const handleDelete = async (id) => {
-    const { data } = await axios.post(`/api/deleteQuestion`, {
-      id: parseInt(id),
+    const { data } = await axios.delete("/api/quiz", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: { id },
     });
-    router.push("/admin/");
     console.log(data);
+    // axios
+    //   .delete(`/api/quiz/${id}`, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     data: { id: id },
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //   });
+    // const { data } = await axios.delete(`/api/quiz/${parseInt(id)}`);
+    // router.push("/admin/");
+    // console.log(data);
   };
 
   return (
