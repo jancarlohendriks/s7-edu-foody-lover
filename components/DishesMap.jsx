@@ -1,27 +1,8 @@
 import Image from "next/image";
-import { Map, useMap, Source, Layer, Marker } from "react-map-gl";
+import { Map, useMap, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
-
-const geojson = {
-  type: "FeatureCollection",
-  features: [
-    {
-      type: "Feature",
-      geometry: { type: "Point", coordinates: [-122.4, 37.8] },
-    },
-  ],
-};
-
-const layerStyle = {
-  id: "point",
-  type: "circle",
-  paint: {
-    "circle-radius": 10,
-    "circle-color": "#007cbf",
-  },
-};
 
 const state = {
   zoom: 9,
@@ -40,9 +21,6 @@ export default function DishesMap({ coordinates }) {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
-      <Source id="my-data" type="geojson" data={geojson}>
-        <Layer {...layerStyle} />
-      </Source>
       <Marker
         longitude={coordinates[0]}
         latitude={coordinates[1]}
@@ -57,14 +35,4 @@ export default function DishesMap({ coordinates }) {
       </Marker>
     </Map>
   );
-}
-
-export function NavigateButton({ center = [-122.4, 37.8] }) {
-  const { myMap } = useMap();
-
-  const onClick = () => {
-    myMap.flyTo({ center: center });
-  };
-
-  return <button onClick={onClick}>Go</button>;
 }

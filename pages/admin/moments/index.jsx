@@ -16,7 +16,7 @@ export default function Admin({ users }) {
       title,
       paragraph,
     });
-    console.log(data);
+    // console.log(data);
   };
 
   return (

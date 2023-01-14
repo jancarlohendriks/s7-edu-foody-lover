@@ -6,12 +6,12 @@ import styles from "@/styles/Home.module.css";
 
 export default function Admin({ moments }) {
   const [momentsList, setMomentsList] = useState([...moments]);
-  console.log(moments);
+  // console.log(moments);
 
   const fetchData = async () => {
     const { data } = await axios.get("/api/moment");
     setMomentsList(data);
-    console.log(data);
+    // console.log(data);
   };
 
   // TODO:

@@ -1,3 +1,4 @@
+import { prisma } from "@/server/db/client";
 import { useState } from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import questions from "./questions";
@@ -6,17 +7,30 @@ import QuestionText from "./QuestionText";
 import AnswerSection from "./AnswerSection";
 import Score from "./Score";
 
-export default function QuizQuestions() {
+export async function getServerSideProps() {
+  const q = await prisma.quizQuestion.findMany({
+    include: { quizAnswer: true },
+  });
+  return {
+    props: {
+      q: JSON.parse(JSON.stringify(q)),
+    },
+  };
+}
+
+export default function QuizQuestions({ q }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
+
+  // console.log(q);
 
   const handleAnswerClick = (isCorrect) => {
     if (isCorrect) {
       setScore(score + 1);
     }
     const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
+    if (nextQuestion < q.length) {
       setCurrentQuestion(nextQuestion);
     } else {
       setShowScore(true);
@@ -26,18 +40,15 @@ export default function QuizQuestions() {
   return (
     <DefaultLayout>
       {showScore ? (
-        <Score score={score} length={questions.length} />
+        <Score score={score} length={q.length} />
       ) : (
         <>
           <div className="question-section">
-            <QuestionCount
-              current={currentQuestion}
-              length={questions.length}
-            />
-            <QuestionText text={questions[currentQuestion].questionText} />
+            <QuestionCount current={currentQuestion} length={q.length} />
+            <QuestionText text={q[currentQuestion].questionText} />
           </div>
           <AnswerSection
-            options={questions[currentQuestion].answerOptions}
+            options={q[currentQuestion].quizAnswer}
             handle={handleAnswerClick}
           />
         </>

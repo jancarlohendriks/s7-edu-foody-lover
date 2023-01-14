@@ -1,9 +1,9 @@
 const AnswerSection = ({ options, handle }) => {
   return (
     <div className="answer-section">
-      {options.map((answerOption, i) => (
-        <button key={i} onClick={() => handle(answerOption.isCorrect)}>
-          {answerOption.answerText}
+      {options.map((option, i) => (
+        <button key={i} onClick={() => handle(option.isCorrect)}>
+          {option.answerText}
         </button>
       ))}
     </div>

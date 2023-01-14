@@ -6,7 +6,7 @@ export default function Quiz() {
     <DefaultLayout>
       <div>
         <h1>Rules</h1>
-        <Link href={"/quiz/signup"}>Continue</Link>
+        <Link href={"/quiz/questions"}>Continue</Link>
       </div>
     </DefaultLayout>
   );

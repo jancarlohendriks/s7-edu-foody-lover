@@ -21,3 +21,17 @@ model Moment {
   title     String
   paragraph String
 }
+
+model QuizQuestion {
+  id           Int          @id @default(autoincrement())
+  questionText String
+  quizAnswer   QuizAnswer[]
+}
+
+model QuizAnswer {
+  id         Int           @id @default(autoincrement())
+  questionId Int
+  question   QuizQuestion? @relation(fields: [questionId], references: [id])
+  answerText String?
+  isCorrect  Boolean       @default(false)
+}

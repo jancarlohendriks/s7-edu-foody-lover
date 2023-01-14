@@ -11,7 +11,7 @@ export default function User({ handleRefresh }) {
       name,
     });
     handleRefresh();
-    console.log(data);
+    // console.log(data);
   };
 
   const handleChange = (e) => {
