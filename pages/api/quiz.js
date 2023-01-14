@@ -1,25 +1,17 @@
-import { prisma } from "../../server/db/client";
+import { prisma } from "@/server/db/client";
 
 export default async function handler(req, res) {
   const { method } = req;
 
   switch (method) {
     case "POST":
-      const { questionText } = req.body;
+      const { questionText, formFields } = req.body;
       const question = await prisma.quizQuestion.create({
         data: {
           questionText,
           quizAnswer: {
             createMany: {
-              data: [
-                {
-                  answerText: "yes",
-                },
-                {
-                  answerText: "yes",
-                  isCorrect: true,
-                },
-              ],
+              data: formFields,
             },
           },
         },
@@ -29,6 +21,18 @@ export default async function handler(req, res) {
       });
       res.status(201).json(question);
       break;
+    // case "DELETE":
+    //   const { id } = req.params;
+    //   const deletedQuestion = await prisma.quizQuestion.delete({
+    //     where: {
+    //       id: id,
+    //     },
+    //     include: {
+    //       quizAnswer: true,
+    //     },
+    //   });
+    //   res.status(201).json(deletedQuestion);
+    //   break;
     default:
       res.setHeader("Allow", ["POST"]);
       res.status(405).end(`Method ${method} Not Allowed`);

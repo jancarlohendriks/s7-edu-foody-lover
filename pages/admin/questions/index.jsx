@@ -1,79 +1,41 @@
 import axios from "axios";
-import { useState } from "react";
+import { prisma } from "@/server/db/client";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import styles from "@/styles/Home.module.css";
 
-export default function AdminQuestions() {
-  const [questionText, setQuestionText] = useState("");
-  const [formFields, setFormFields] = useState([{ name: "", age: "" }]);
+export default function AdminQuestions({ questions }) {
+  const router = useRouter();
+  console.log(questions);
 
-  const handleFormChange = (event, index) => {
-    let data = [...formFields];
-    data[index][event.target.name] = event.target.value;
-    setFormFields(data);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { data } = await axios.post("/api/quiz", {
-      questionText,
+  const handleDelete = async (id) => {
+    const { data } = await axios.post(`/api/deleteQuestion`, {
+      id: parseInt(id),
     });
+    router.push("/admin/");
     console.log(data);
-  };
-
-  const addFields = () => {
-    let object = {
-      name: "",
-      age: "",
-    };
-    setFormFields([...formFields, object]);
-  };
-
-  const submit = (e) => {
-    e.preventDefault();
-    console.log(formFields);
-  };
-
-  const removeFields = (index) => {
-    let data = [...formFields];
-    data.splice(index, 1);
-    setFormFields(data);
   };
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <form onSubmit={handleSubmit} method="POST">
-          <div>
-            {formFields.map((form, index) => {
-              return (
-                <div key={index}>
-                  <input
-                    name="name"
-                    placeholder="Name"
-                    onChange={(event) => handleFormChange(event, index)}
-                    value={form.name}
-                  />
-                  <input
-                    name="age"
-                    placeholder="Age"
-                    onChange={(event) => handleFormChange(event, index)}
-                    value={form.age}
-                  />
-                  <button onClick={() => removeFields(index)}>Remove</button>
-                </div>
-              );
-            })}
-            {/* <input
-              type="text"
-              onChange={(e) => setQuestionText(e.target.value)}
-            /> */}
+        {questions.map((question) => (
+          <div key={question.id}>
+            <p>{question.questionText}</p>
+            <button onClick={() => handleDelete(question.id)}>Delete</button>
+            {/* <Link href={`/admin/questions/${question.id}`}>Edit</Link> */}
           </div>
-          {/* <button type="submit">Add Question</button> */}
-        </form>
-        <button onClick={addFields}>Add More..</button>
-        <br />
-        <button onClick={submit}>Submit</button>
+        ))}
       </main>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const questions = await prisma.quizQuestion.findMany();
+  return {
+    props: {
+      questions: JSON.parse(JSON.stringify(questions)),
+    },
+  };
 }
