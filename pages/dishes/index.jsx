@@ -4,10 +4,10 @@ import { MapProvider } from "react-map-gl";
 
 import DefaultLayout from "@/layouts/DefaultLayout";
 
-import dishes from "./data/dishes";
-import drinks from "./data/drinks";
-import starters from "./data/starters";
-import desserts from "./data/desserts";
+import dishes from "../../mock-data/dishes";
+import drinks from "../../mock-data/drinks";
+import starters from "../../mock-data/starters";
+import desserts from "../../mock-data/desserts";
 
 const DishesMapWithNoSSR = dynamic(() => import("@/components/DishesMap"), {
   ssr: false,
