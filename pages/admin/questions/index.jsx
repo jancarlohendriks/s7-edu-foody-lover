@@ -1,21 +1,31 @@
 import axios from "axios";
 import { prisma } from "@/server/db/client";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import styles from "@/styles/Home.module.css";
+import { useState } from "react";
 
 export default function AdminQuestions({ questions }) {
-  const router = useRouter();
-  console.log(questions);
+  const [quizList, setQuizList] = useState([...questions]);
+  // const router = useRouter();
+  // console.log(questions);
+
+  const fetchData = async () => {
+    await axios.get("/api/quiz").then((response) => setQuizList(response.data));
+    // console.log(data);
+    // setQuizList(data);
+  };
 
   const handleDelete = async (id) => {
-    const { data } = await axios.delete("/api/quiz", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: { id },
-    });
-    console.log(data);
+    await axios
+      .delete("/api/quiz", {
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        data: { id },
+      })
+      .then(fetchData);
+    // .then(() => fetchData());
+
+    // console.log(data);
     // axios
     //   .delete(`/api/quiz/${id}`, {
     //     headers: {
@@ -34,13 +44,14 @@ export default function AdminQuestions({ questions }) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        {questions.map((question) => (
-          <div key={question.id}>
-            <p>{question.questionText}</p>
-            <button onClick={() => handleDelete(question.id)}>Delete</button>
-            {/* <Link href={`/admin/questions/${question.id}`}>Edit</Link> */}
-          </div>
-        ))}
+        {quizList &&
+          quizList?.map((question) => (
+            <div key={question.id}>
+              <p>{question.questionText}</p>
+              <button onClick={() => handleDelete(question.id)}>Delete</button>
+              {/* <Link href={`/admin/questions/${question.id}`}>Edit</Link> */}
+            </div>
+          ))}
       </main>
     </div>
   );

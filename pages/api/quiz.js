@@ -4,6 +4,15 @@ export default async function handler(req, res) {
   const { method } = req;
 
   switch (method) {
+    case "GET":
+      // const { questionText, formFields } = req.body;
+      const questions = await prisma.quizQuestion.findMany({
+        include: {
+          quizAnswer: true,
+        },
+      });
+      res.status(201).json(questions);
+      break;
     case "POST":
       const { questionText, formFields } = req.body;
       const question = await prisma.quizQuestion.create({
