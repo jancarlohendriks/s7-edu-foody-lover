@@ -5,7 +5,6 @@ export default async function handler(req, res) {
 
   switch (method) {
     case "GET":
-      // const { questionText, formFields } = req.body;
       const questions = await prisma.quizQuestion.findMany({
         include: {
           quizAnswer: true,

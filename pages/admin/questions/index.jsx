@@ -5,40 +5,17 @@ import { useState } from "react";
 
 export default function AdminQuestions({ questions }) {
   const [quizList, setQuizList] = useState([...questions]);
-  // const router = useRouter();
-  // console.log(questions);
 
   const fetchData = async () => {
     await axios.get("/api/quiz").then((response) => setQuizList(response.data));
-    // console.log(data);
-    // setQuizList(data);
   };
 
   const handleDelete = async (id) => {
     await axios
       .delete("/api/quiz", {
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
         data: { id },
       })
       .then(fetchData);
-    // .then(() => fetchData());
-
-    // console.log(data);
-    // axios
-    //   .delete(`/api/quiz/${id}`, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     data: { id: id },
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
-    // const { data } = await axios.delete(`/api/quiz/${parseInt(id)}`);
-    // router.push("/admin/");
-    // console.log(data);
   };
 
   return (
