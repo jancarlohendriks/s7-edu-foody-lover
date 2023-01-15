@@ -1,7 +1,7 @@
 import { prisma } from "@/server/db/client";
 import { useState } from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
-import questions from "./questions";
+import questions from "../../../mock-data/questions";
 import QuestionCount from "pages/quiz/questions/QuestionCount";
 import QuestionText from "./QuestionText";
 import AnswerSection from "./AnswerSection";
