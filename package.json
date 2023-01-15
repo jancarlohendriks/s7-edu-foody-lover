@@ -7,7 +7,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"prisma:studio": "npx prisma studio"
+		"prisma:studio": "npx prisma studio",
+		"production:build": "npx prisma generate && npx prisma migrate deploy && next build"
 	},
 	"dependencies": {
 		"@prisma/client": "^4.8.1",
